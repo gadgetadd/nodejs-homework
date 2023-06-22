@@ -1,15 +1,9 @@
-const contacts = require('../models/contacts')
-const Joi = require("joi")
+const { Contact } = require('../models/contacts')
 
-const contactSchema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().pattern(/^\(\d{3}\) \d{3}-\d{4}$/).required(),
-})
 
 const getAll = async (req, res, next) => {
     try {
-        const result = await contacts.listContacts();
+        const result = await Contact.find();
         res.json(result);
     } catch (error) {
         next(error)
@@ -19,7 +13,7 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
     try {
         const { contactId } = req.params;
-        const result = await contacts.getById(contactId);
+        const result = await Contact.findById(contactId);
         if (!result) {
             const error = new Error("Not found");
             error.status = 404;
@@ -33,12 +27,7 @@ const getById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
     try {
-        const { error } = contactSchema.validate(req.body);
-        if (error) {
-            error.status = 400;
-            throw error;
-        }
-        const result = await contacts.addContact(req.body);
+        const result = await Contact.create(req.body);
         res.status(201).json(result);
     } catch (error) {
         next(error)
@@ -48,7 +37,7 @@ const add = async (req, res, next) => {
 const deleteById = async (req, res, next) => {
     try {
         const { contactId } = req.params;
-        const result = await contacts.removeContact(contactId);
+        const result = await Contact.findByIdAndRemove(contactId);
         if (!result) {
             const error = new Error("Not found");
             error.status = 404;
@@ -64,13 +53,9 @@ const deleteById = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
     try {
-        const { error } = contactSchema.validate(req.body);
-        if (error) {
-            error.status = 400;
-            throw error;
-        }
+
         const { contactId } = req.params;
-        const result = await contacts.updateContact(contactId, req.body);
+        const result = await Contact.findByIdAndUpdate(contactId, req.body);
         if (!result) {
             const error = new Error("Not found");
             error.status = 404;
