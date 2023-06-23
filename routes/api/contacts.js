@@ -17,6 +17,6 @@ router.delete('/:contactId', validateMongoId, ctrl.deleteById)
 
 router.put('/:contactId', validateMongoId, validateRequest(contactJoiSchema), ctrl.updateById)
 
-router.patch('/:contactId/favorite', validateMongoId, validateRequest(favoriteJoiSchema), ctrl.updateById)
+router.patch('/:contactId/favorite', validateMongoId, validateRequest(favoriteJoiSchema), ctrl.updateStatusContact)
 
 module.exports = router

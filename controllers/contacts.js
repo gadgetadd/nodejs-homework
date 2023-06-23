@@ -4,7 +4,7 @@ const createError = require('../helpers/createError')
 
 const getAll = async (_, res, next) => {
     try {
-        const result = await Contact.find({}, "-createdAt -updatedAt");
+        const result = await Contact.find({});
         res.json(result);
     } catch (error) {
         next(error)
@@ -46,7 +46,17 @@ const deleteById = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
     try {
+        const { contactId } = req.params;
+        const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+        if (!result) createError(404, "Not found");
+        res.json(result);
+    } catch (error) {
+        next(error)
+    }
+}
 
+const updateStatusContact = async (req, res, next) => {
+    try {
         const { contactId } = req.params;
         const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
         if (!result) createError(404, "Not found");
@@ -62,6 +72,7 @@ module.exports = {
     add,
     updateById,
     deleteById,
+    updateStatusContact
 }
 
 
