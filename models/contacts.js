@@ -6,9 +6,14 @@ const contactJoiSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email(),
   phone: Joi.string().pattern(/^\(\d{3}\) \d{3}-\d{4}$/),
+  favorite: Joi.boolean()
 })
 
-const contacts = new Schema({
+const favoriteJoiSchema = Joi.object({
+  favorite: Joi.boolean().required()
+})
+
+const contactSchema = new Schema({
   name: {
     type: String,
     required: [true, 'Set name for contact'],
@@ -22,12 +27,20 @@ const contacts = new Schema({
   favorite: {
     type: Boolean,
     default: false,
-  },
+  }
+}, {
+  versionKey: false, timestamps: true
 });
 
-const Contact = model('contact', contacts)
+contactSchema.post("save", (err, _, next) => {
+  err.status = '400';
+  next();
+})
+
+const Contact = model('contact', contactSchema)
 
 module.exports = {
   Contact,
-  contactJoiSchema
+  contactJoiSchema,
+  favoriteJoiSchema
 }

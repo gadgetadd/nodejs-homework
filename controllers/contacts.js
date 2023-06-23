@@ -1,9 +1,10 @@
 const { Contact } = require('../models/contacts')
+const createError = require('../helpers/createError')
 
 
-const getAll = async (req, res, next) => {
+const getAll = async (_, res, next) => {
     try {
-        const result = await Contact.find();
+        const result = await Contact.find({}, "-createdAt -updatedAt");
         res.json(result);
     } catch (error) {
         next(error)
@@ -14,11 +15,7 @@ const getById = async (req, res, next) => {
     try {
         const { contactId } = req.params;
         const result = await Contact.findById(contactId);
-        if (!result) {
-            const error = new Error("Not found");
-            error.status = 404;
-            throw error;
-        }
+        if (!result) createError(404, "Not found");
         res.json(result);
     } catch (error) {
         next(error)
@@ -38,11 +35,7 @@ const deleteById = async (req, res, next) => {
     try {
         const { contactId } = req.params;
         const result = await Contact.findByIdAndRemove(contactId);
-        if (!result) {
-            const error = new Error("Not found");
-            error.status = 404;
-            throw error;
-        }
+        if (!result) createError(404, "Not found");
         res.json({
             message: "contact deleted"
         })
@@ -55,12 +48,8 @@ const updateById = async (req, res, next) => {
     try {
 
         const { contactId } = req.params;
-        const result = await Contact.findByIdAndUpdate(contactId, req.body);
-        if (!result) {
-            const error = new Error("Not found");
-            error.status = 404;
-            throw error;
-        }
+        const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+        if (!result) createError(404, "Not found");
         res.json(result);
     } catch (error) {
         next(error)
