@@ -1,5 +1,5 @@
-const { Contact } = require('../models/contacts')
-const createError = require('../helpers/createError')
+const { Contact } = require('../../models/contact');
+const { createError } = require('../../helpers');
 
 const deleteById = async (req, res, next) => {
     try {
@@ -12,7 +12,7 @@ const deleteById = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-}
+};
 
-module.exports = deleteById
+module.exports = deleteById;
 

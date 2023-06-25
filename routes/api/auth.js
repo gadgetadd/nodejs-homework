@@ -1,13 +1,20 @@
-const express = require('express')
+const express = require('express');
 
-// const ctrl = require('../../controllers/contacts')
+const ctrl = require('../../controllers/users');
 
-// const { validateRequest, validateMongoId } = require('../../middlewares')
-// const { contactJoiSchema, favoriteJoiSchema } = require('../../models/contacts')
+const { validateRequest, authMiddleware } = require('../../middlewares');
 
-const router = express.Router()
+const { loginUserJoiSchema, registerUserJoiSchema } = require('../../models/user');
 
-// router.get('/', ctrl.getAll)
+const router = express.Router();
+
+router.post('/register', validateRequest(registerUserJoiSchema), ctrl.register);
+
+router.post('/login', validateRequest(loginUserJoiSchema), ctrl.login);
+
+router.get("/current", authMiddleware, ctrl.getCurrent);
+
+router.post("/logout", authMiddleware, ctrl.logout);
 
 
-module.exports = router
+module.exports = router;

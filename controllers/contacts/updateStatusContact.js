@@ -1,5 +1,5 @@
-const { Contact } = require('../models/contacts')
-const createError = require('../helpers/createError')
+const { Contact } = require('../../models/contact');
+const { createError } = require('../../helpers');
 
 const updateStatusContact = async (req, res, next) => {
     try {
@@ -10,6 +10,6 @@ const updateStatusContact = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-}
+};
 
-module.exports = updateStatusContact
+module.exports = updateStatusContact;

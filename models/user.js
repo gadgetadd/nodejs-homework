@@ -1,17 +1,21 @@
 const { Schema, model } = require('mongoose');
 
-const Joi = require("joi")
+const Joi = require("joi");
 
-const { handleMongoError } = require('../middlewares')
+const handleMongoError = require('../middlewares/handleMongoError');
 
-const subscriptionList = ["starter", "pro", "business"]
+const subscriptionList = ["starter", "pro", "business"];
 
-const userJoiSchema = Joi.object({
+const registerUserJoiSchema = Joi.object({
     password: Joi.string().required(),
     email: Joi.string().email().required(),
-    subscription: Joi.string().valid(subscriptionList),
+    subscription: Joi.string().valid(...subscriptionList),
+});
 
-})
+const loginUserJoiSchema = Joi.object({
+    password: Joi.string().required(),
+    email: Joi.string().email().required(),
+});
 
 const userSchema = new Schema({
     password: {
@@ -33,11 +37,12 @@ const userSchema = new Schema({
     versionKey: false
 });
 
-userSchema.post("save", handleMongoError)
+userSchema.post("save", handleMongoError);
 
-const User = model('contact', userSchema)
+const User = model('user', userSchema);
 
 module.exports = {
     User,
-    userJoiSchema,
-}
+    registerUserJoiSchema,
+    loginUserJoiSchema
+};

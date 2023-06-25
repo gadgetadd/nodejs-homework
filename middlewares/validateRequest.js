@@ -1,4 +1,4 @@
-const createError = require('../helpers/createError')
+const { createError } = require('../helpers');
 
 const validateRequest = (schema) => {
     return ((req, _, next) => {
@@ -6,6 +6,6 @@ const validateRequest = (schema) => {
         if (error) next(createError(400, error.message));
         next();
     })
-}
+};
 
 module.exports = validateRequest;
