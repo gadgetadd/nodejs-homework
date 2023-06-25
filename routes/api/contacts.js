@@ -2,16 +2,21 @@ const express = require('express')
 
 const ctrl = require('../../controllers/contacts')
 
+const { validateRequest, validateMongoId } = require('../../middlewares')
+const { contactJoiSchema, favoriteJoiSchema } = require('../../models/contacts')
+
 const router = express.Router()
 
 router.get('/', ctrl.getAll)
 
-router.get('/:contactId', ctrl.getById)
+router.get('/:contactId', validateMongoId, ctrl.getById)
 
-router.post('/', ctrl.add)
+router.post('/', validateRequest(contactJoiSchema), ctrl.add)
 
-router.delete('/:contactId', ctrl.deleteById)
+router.delete('/:contactId', validateMongoId, ctrl.deleteById)
 
-router.put('/:contactId', ctrl.updateById)
+router.put('/:contactId', validateMongoId, validateRequest(contactJoiSchema), ctrl.updateById)
+
+router.patch('/:contactId/favorite', validateMongoId, validateRequest(favoriteJoiSchema), ctrl.updateStatusContact)
 
 module.exports = router
