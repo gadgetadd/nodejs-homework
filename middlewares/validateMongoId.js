@@ -3,7 +3,7 @@ const createError = require('../helpers/createError');
 
 const validateMongoId = (req, _, next) => {    
         const { contactId } = req.params;    
-        if (!isValidObjectId(contactId)) createError(400, `${contactId} is not valid ID`);
+        if (!isValidObjectId(contactId)) next(createError(400, `${contactId} is not valid ID`));
         next();  
 };
 
