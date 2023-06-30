@@ -2,7 +2,12 @@ const { Schema, model } = require('mongoose');
 
 const Joi = require("joi");
 
+// const {handleMongoError, hashPassword, comparePassword, signToken } = require('../middlewares');
+
 const handleMongoError = require('../middlewares/handleMongoError');
+const hashPassword = require('../middlewares/hashPassword');
+const comparePassword = require('../middlewares/comparePassword');
+const signToken = require('../middlewares/signToken');
 
 const subscriptionList = ["starter", "pro", "business"];
 
@@ -37,7 +42,13 @@ const userSchema = new Schema({
     versionKey: false
 });
 
+userSchema.pre('save', hashPassword);
+
 userSchema.post("save", handleMongoError);
+
+userSchema.methods.comparePassword = comparePassword;
+
+userSchema.methods.signToken = signToken;
 
 const User = model('user', userSchema);
 
