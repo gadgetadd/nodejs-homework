@@ -1,7 +1,12 @@
-const createError = require('./createError');
-const ctrlWrapper = require('./ctrlWrapper');
+const comparePassword = require('./comparePassword');
+const handleMongoError = require('./handleMongoError');
+const signToken = require('./signToken');
+const hashPassword = require('./hashPassword');
 
 module.exports = {
-    createError,
-    ctrlWrapper
+    comparePassword,
+    handleMongoError,
+    signToken,
+    hashPassword,
+
 };
