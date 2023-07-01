@@ -4,6 +4,7 @@ const cors = require('cors')
 require('dotenv').config();
 
 const contactsRouter = require('./routes/api/contacts')
+const authRouter = require('./routes/api/auth')
 
 
 const app = express()
@@ -14,6 +15,7 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+app.use('/api/users', authRouter)
 app.use('/api/contacts', contactsRouter)
 
 app.use((_, res) => {
@@ -21,8 +23,9 @@ app.use((_, res) => {
 })
 
 app.use((err, req, res, next) => {
-  const { status = 500, message = "Server error" } = err;
-  res.status(status).json({ message })
+  const { message = "Server error" } = err;
+  const { statusCode = 500 } = res;
+  res.status(statusCode).json({ message })
 })
 
 module.exports = app
