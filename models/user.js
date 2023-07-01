@@ -2,10 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const Joi = require("joi");
 
-const handleMongoError = require('../helpers/handleMongoError');
-const hashPassword = require('../helpers/hashPassword');
-const comparePassword = require('../helpers/comparePassword');
-const signToken = require('../helpers/signToken');
+const { handleMongoError, signToken, comparePassword, hashPassword } = require("../helpers");
 
 const subscriptionList = ["starter", "pro", "business"];
 
@@ -18,6 +15,10 @@ const registerUserJoiSchema = Joi.object({
 const loginUserJoiSchema = Joi.object({
     password: Joi.string().required(),
     email: Joi.string().email().required(),
+});
+
+const subscriptionJoiSchema = Joi.object({
+    subscription: Joi.string().valid(...subscriptionList).required().error(new Error('missing field subscription')),
 });
 
 const userSchema = new Schema({
@@ -40,18 +41,19 @@ const userSchema = new Schema({
     versionKey: false
 });
 
-userSchema.pre('save', hashPassword);
-
-userSchema.post("save", handleMongoError);
-
 userSchema.methods.comparePassword = comparePassword;
 
 userSchema.methods.signToken = signToken;
+
+userSchema.pre('save', hashPassword);
+
+userSchema.post("save", handleMongoError);
 
 const User = model('user', userSchema);
 
 module.exports = {
     User,
     registerUserJoiSchema,
-    loginUserJoiSchema
+    loginUserJoiSchema,
+    subscriptionJoiSchema
 };

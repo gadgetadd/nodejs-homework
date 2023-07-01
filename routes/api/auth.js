@@ -4,7 +4,7 @@ const ctrl = require('../../controllers/auth');
 
 const { validateRequest, authMiddleware } = require('../../middlewares');
 
-const { loginUserJoiSchema, registerUserJoiSchema } = require('../../models/user');
+const { loginUserJoiSchema, registerUserJoiSchema, subscriptionJoiSchema } = require('../../models/user');
 
 const router = express.Router();
 
@@ -15,6 +15,8 @@ router.post('/login', validateRequest(loginUserJoiSchema), asyncHandler(ctrl.log
 router.get("/current", authMiddleware, asyncHandler(ctrl.getCurrent));
 
 router.post("/logout", authMiddleware, asyncHandler(ctrl.logout));
+
+router.patch('/', authMiddleware, validateRequest(subscriptionJoiSchema), asyncHandler(ctrl.updateSubscription));
 
 
 module.exports = router;

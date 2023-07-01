@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const Joi = require("joi");
 
-const { handleMongoError } = require('../middlewares');
+const { handleMongoError } = require('../helpers');
 
 const contactJoiSchema = Joi.object({
   name: Joi.string().required().error(new Error('missing required name field')),
