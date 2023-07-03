@@ -18,7 +18,9 @@ const loginUserJoiSchema = Joi.object({
 });
 
 const subscriptionJoiSchema = Joi.object({
-    subscription: Joi.string().valid(...subscriptionList).required().error(new Error('missing field subscription')),
+    subscription: Joi.string().valid(...subscriptionList).required().messages({
+        'any.required': 'missing field subscription'
+    })
 });
 
 const userSchema = new Schema({
@@ -36,6 +38,7 @@ const userSchema = new Schema({
         enum: subscriptionList,
         default: "starter"
     },
+    avatarURL: String,
     token: String
 }, {
     versionKey: false
