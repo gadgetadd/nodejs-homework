@@ -1,3 +1,5 @@
+const gravatar = require('gravatar');
+
 const { User } = require('../../models/user');
 
 
@@ -8,11 +10,13 @@ const register = async (req, res) => {
         res.status(409);
         throw new Error("Email in use");
     };
-    const newUser = await User.create(req.body);
+    const avatarURL = gravatar.url(email, { s: '250' })
+    const newUser = await User.create({ ...req.body, avatarURL });
     res.status(201).json({
         user: {
             email: newUser.email,
-            subscription: newUser.subscription
+            subscription: newUser.subscription,
+            avatarURL: newUser.avatarURL
         }
     })
 };
