@@ -4,7 +4,7 @@ const ctrl = require('../../controllers/auth');
 
 const { validateRequest, authMiddleware, upload } = require('../../middlewares');
 
-const { loginUserJoiSchema, registerUserJoiSchema, subscriptionJoiSchema } = require('../../models/user');
+const { loginUserJoiSchema, registerUserJoiSchema, subscriptionJoiSchema, emailJoiSchema } = require('../../models/user');
 
 const router = express.Router();
 
@@ -20,6 +20,9 @@ router.patch('/', authMiddleware, validateRequest(subscriptionJoiSchema), asyncH
 
 router.patch("/avatars", authMiddleware, upload.single("avatar"), asyncHandler(ctrl.updateAvatar));
 
+router.post("/verify", validateRequest(emailJoiSchema), asyncHandler(ctrl.resendEmail));
+
+router.get("/verify/:verificationToken", asyncHandler(ctrl.verifyEmail));
 
 
 module.exports = router;

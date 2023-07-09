@@ -23,6 +23,12 @@ const subscriptionJoiSchema = Joi.object({
     })
 });
 
+const emailJoiSchema = Joi.object({
+    email: Joi.string().email().required().messages({
+        'any.required': 'missing required field email'
+    })
+});
+
 const userSchema = new Schema({
     password: {
         type: String,
@@ -37,6 +43,14 @@ const userSchema = new Schema({
         type: String,
         enum: subscriptionList,
         default: "starter"
+    },
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+    verificationToken: {
+        type: String,
+        required: [true, 'Verify token is required'],
     },
     avatarURL: String,
     token: String
@@ -58,5 +72,6 @@ module.exports = {
     User,
     registerUserJoiSchema,
     loginUserJoiSchema,
-    subscriptionJoiSchema
+    subscriptionJoiSchema,
+    emailJoiSchema
 };
