@@ -3,6 +3,7 @@ const handleMongoError = require('./handleMongoError');
 const signToken = require('./signToken');
 const hashPassword = require('./hashPassword');
 const processImage = require('./processImage');
+const sendMail = require('./sendMail');
 
 module.exports = {
     comparePassword,
@@ -10,4 +11,5 @@ module.exports = {
     signToken,
     hashPassword,
     processImage,
+    sendMail
 };
