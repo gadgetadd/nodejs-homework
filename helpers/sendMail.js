@@ -1,19 +1,20 @@
 const nodemailer = require('nodemailer');
 
+const { MAIL_LOGIN, MAIL_PASSWORD } = process.env;
+
 const config = {
-    host: 'smtp.ukr.net',
-    port: 465,
-    secure: true,
+    host: 'smtp.office365.com',
+    port: 587,
     auth: {
-        user: 'sendmail-test@ukr.net',
-        pass: process.env.MAIL_PASSWORD,
-    },
+        user: MAIL_LOGIN,
+        pass: MAIL_PASSWORD
+    }
 };
 
 const transport = nodemailer.createTransport(config);
 
 const sendMail = async (mail) => {
-    await transport.sendMail({ ...mail, from: 'sendmail-test@ukr.net' })
+    await transport.sendMail({ ...mail, from: 'outlook_d8a1e551f0fab309@outlook.com' })
     return true;
 };
 
